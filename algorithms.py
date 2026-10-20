@@ -227,3 +227,40 @@ def prim_mst(graph):
             )
 
     return mst_edges, total_distance
+
+def build_graph(airports, routes, blocked_routes=None, congestion=None):
+    import networkx as nx
+
+    graph = nx.Graph()
+    blocked_routes = blocked_routes or set()
+    congestion = congestion or {}
+
+    for airport in airports:
+        graph.add_node(airport)
+
+    for route in routes:
+        source = route["source"]
+        destination = route["destination"]
+        key = tuple(sorted((source, destination)))
+
+        if key in blocked_routes:
+            continue
+
+        distance = route["distance"]
+        capacity = route["capacity"]
+        traffic = congestion.get(key, 0)
+
+        penalty = 0
+        if capacity > 0 and traffic >= capacity:
+            penalty = distance * 0.5
+
+        graph.add_edge(
+            source,
+            destination,
+            weight=distance + penalty,
+            distance=distance,
+            capacity=capacity,
+            traffic=traffic,
+        )
+
+    return graph
