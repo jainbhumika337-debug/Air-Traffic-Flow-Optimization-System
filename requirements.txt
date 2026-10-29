@@ -5,3 +5,4 @@ pandas
 gunicorn
 Flask
 mysql-connector-python
+Flask-Cors
