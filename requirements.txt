@@ -4,3 +4,4 @@ plotly
 pandas
 gunicorn
 Flask
+mysql-connector-python
